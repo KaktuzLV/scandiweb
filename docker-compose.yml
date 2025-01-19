@@ -1,0 +1,27 @@
+services:
+  mysql:
+    image: mysql:5.6
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - mysql:/var/lib/mysql:cached
+    ports:
+      - "3306:3306"
+  php:
+    build:
+      dockerfile: Dockerfile
+    volumes:
+      - ./:/app
+  nginx:
+    image: nginx:1.27.3-alpine
+    volumes:
+      - ./:/app
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "80:80"
+volumes:
+  mysql:
